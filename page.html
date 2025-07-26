@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Boutique en ligne de Ndayishimiye Marie Rose au Burundi : couvre-bébés, couvre-lits, sacoches et marchandises artisanales de qualité. Confort et style uniques.">
+    <meta name="keywords" content="couvre-bébé, couvre-lit, sacoche, commerce en ligne, Ndayishimiye Marie Rose, Burundi, textiles, artisanat, mode">
+    <meta name="author" content="Ndayishimiye Marie Rose">
+    <title>Commerce de Ndayishimiye Marie Rose</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@700&family=Nunito:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+        /* Loader */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #1e3a8a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+        .loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .loader::before {
+            content: '';
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f59e0b;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        nav {
+            background: rgba(10, 25, 47, 0.85);
+            backdrop-filter: blur(12px);
+            color: white;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 1.2rem 0;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+        }
+        nav .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+        nav a {
+            color: #f8fafc;
+            text-decoration: none;
+            margin: 0 1.8rem;
+            font-weight: 600;
+            font-size: 1.2rem;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        nav a.active, nav a:hover {
+            color: #f59e0b;
+        }
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: #f59e0b;
+            bottom: -5px;
+            left: 0;
+            transition: width 0.3s ease;
+        }
+        nav a:hover::after, nav a.active::after {
+            width: 100%;
+        }
+        .nav-toggle {
+            display: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #f8fafc;
+            transition: transform 0.3s ease;
+        }
+        .nav-toggle.active {
+            transform: rotate(90deg);
+        }
+        header {
+            position: relative;
+            background: linear-gradient(135deg, #1e3a8a, #ea580c, #f59e0b);
+            color: white;
+            text-align: center;
+            padding: 10rem 0 12rem;
+            overflow: hidden;
+        }
+        header .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            fill: #f8fafc;
+            animation: wave 10s linear infinite;
+        }
+        header h1 {
+            font-family: 'Lora', serif;
+            font-size: 4.2rem;
+            margin-bottom: 1rem;
+            animation: fadeInDown 1.5s ease;
+        }
+        header p {
+            font-size: 1.5rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .owner-photo {
+            margin-top: 4rem;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        .owner-photo img {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 10px solid #fff;
+            box-shadow: 0 0 40px rgba(234, 88, 12, 0.6);
+            animation: glow 3s ease-in-out infinite;
+        }
+        .owner-photo p {
+            font-size: 1.4rem;
+            color: #f8fafc;
+            margin-top: 2rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 5rem 2rem;
+        }
+        .description, .products, .contact {
+            margin-bottom: 6rem;
+            opacity: 0;
+            animation: slideIn 1.2s ease forwards;
+        }
+        .description { animation-delay: 0.4s; }
+        .products { animation-delay: 0.6s; }
+        .contact { animation-delay: 0.8s; }
+        h2 {
+            font-family: 'Lora', serif;
+            font-size: 3.5rem;
+            color: #1e293b;
+            margin-bottom: 2.5rem;
+            text-align: center;
+            position: relative;
+        }
+        h2::after {
+            content: '';
+            width: 120px;
+            height: 8px;
+            background: linear-gradient(90deg, #ea580c, #f59e0b);
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        p {
+            font-size: 1.3rem;
+            color: #475569;
+            text-align: center;
+        }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+        .product-item {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            text-align: center;
+            padding: 2.5rem;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        .product-item:hover {
+            transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
+        }
+        .product-item img {
+            max-width: 100%;
+            height: 240px;
+            object-fit: cover;
+            border-radius: 16px;
+            box-shadow: 0 0 20px rgba(234, 88, 12, 0.3);
+            transition: transform 0.5s ease;
+        }
+        .product-item:hover img {
+            transform: scale(1.1);
+        }
+        .product-item .badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(90deg, #ea580c, #f59e0b);
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 700;
+            animation: pulse 2.5s infinite;
+        }
+        .product-item p {
+            margin: 1.2rem 0;
+            font-size: 1.2rem;
+        }
+        .product-item p.price {
+            font-family: 'Lora', serif;
+            font-weight: bold;
+            color: #1e3a8a;
+            font-size: 1.6rem;
+        }
+        .contact {
+            text-align: center;
+        }
+        .contact p.cta {
+            font-family: 'Lora', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e3a8a;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .contact p.cta::before {
+            content: 'Commandez dès maintenant via WhatsApp ou email !';
+            position: absolute;
+            width: 100%;
+            animation: marquee 15s linear infinite;
+        }
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 2.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .contact-item a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.2rem;
+            color: #1e293b;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.2rem;
+            padding: 1.5rem;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            transition: all 0.4s ease;
+        }
+        .contact-item a:hover {
+            background: linear-gradient(90deg, #ea580c, #f59e0b);
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 12px 30px rgba(234, 88, 12, 0.4);
+        }
+        .contact-item img {
+            width: 48px;
+            height: 48px;
+            transition: transform 0.4s ease;
+        }
+        .contact-item a:hover img {
+            transform: rotate(360deg);
+        }
+        footer {
+            background: #1e293b;
+            color: #f8fafc;
+            text-align: center;
+            padding: 3rem;
+            margin-top: 6rem;
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-40px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+            100% { transform: scale(1); }
+        }
+        @keyframes glow {
+            0% { box-shadow: 0 0 20px rgba(234, 88, 12, 0.6); }
+            50% { box-shadow: 0 0 40px rgba(234, 88, 12, 0.9); }
+            100% { box-shadow: 0 0 20px rgba(234, 88, 12, 0.6); }
+        }
+        @keyframes wave {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-2000px); }
+        }
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        @media (max-width: 768px) {
+            nav .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background: rgba(10, 25, 47, 0.9);
+                padding: 2rem 0;
+            }
+            nav .nav-links.active {
+                display: flex;
+            }
+            .nav-toggle {
+                display: block;
+            }
+            header h1 {
+                font-size: 2.8rem;
+            }
+            header p {
+                font-size: 1.3rem;
+            }
+            .owner-photo img {
+                width: 180px;
+                height: 180px;
+            }
+            .product-item img {
+                height: 200px;
+            }
+            .contact p.cta {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loader"></div>
+    <nav>
+        <div class="container">
+            <div class="nav-toggle">☰</div>
+            <div class="nav-links">
+                <a href="#home" aria-label="Aller à la section Accueil">Accueil</a>
+                <a href="#products" aria-label="Aller à la section Produits">Produits</a>
+                <a href="#contact" aria-label="Aller à la section Contact">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <header id="home">
+        <svg class="wave" viewBox="0 0 2000 100" preserveAspectRatio="none">
+            <path d="M0,100 C500,0 1500,200 2000,100 L2000,100 L0,100 Z" fill="#f8fafc"/>
+        </svg>
+        <h1>Ndayishimiye Marie Rose</h1>
+        <p>Artisanat burundais d’exception : confort, élégance et qualité pour vos textiles</p>
+        <div class="owner-photo">
+            <img src="c:\Users\SWC\Downloads\IMG-20250708-WA0005.jpg" alt="Ndayishimiye Marie Rose, entrepreneuse burundaise et fondatrice de la boutique">
+            <p>Ndayishimiye Marie Rose, entrepreneuse burundaise, infuse passion et savoir-faire artisanal dans chaque produit pour sublimer votre quotidien.</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="description" id="about">
+            <h2>À propos de nous</h2>
+            <p>Découvrez le Commerce de Ndayishimiye Marie Rose, votre boutique en ligne basée au Burundi. Nous proposons des couvre-bébés, couvre-lits, sacoches et marchandises artisanales, conçus avec soin pour allier confort, style et durabilité. Chaque article reflète notre engagement envers la qualité et l’élégance burundaise.</p>
+        </section>
+
+        <section class="products" id="products">
+            <h2>Nos produits</h2>
+            <div class="products-grid">
+                <article class="product-item" data-tilt data-tilt-max="10">
+                    <span class="badge">Nouveau</span>
+                    <img src="coubre bebe.jpg" alt="Couvre-bébé en coton bio, doux et lavable, idéal pour bébés">
+                    <p>Couvre-bébés en coton bio, doux et lavables, conçus pour le confort optimal de vos tout-petits.</p>
+                    <p class="price">À partir de 45 000 FBu</p>
+                </article>
+                <article class="product-item" data-tilt data-tilt-max="10">
+                    <span class="badge">Tendance</span>
+                    <img src="couvre-lit.jpg" alt="Couvre-lit élégant en tissu haut de gamme">
+                    <p>Couvre-lits en tissu premium, parfaits pour sublimer votre chambre avec élégance.</p>
+                    <p class="price">À partir de 200 000 FBu</p>
+                </article>
+                <article class="product-item" data-tilt data-tilt-max="10">
+                    <span class="badge">Best-seller</span>
+                    <img src="saccoches.jpg" alt="Sacoche moderne et pratique pour toutes occasions">
+                    <p>Sacoches modernes et pratiques, idéales pour vos sorties quotidiennes ou spéciales.</p>
+                    <p class="price">À partir de 50 000 FBu</p>
+                </article>
+                <article class="product-item" data-tilt data-tilt-max="10">
+                    <img src="marchandises.jpg" alt="Marchandises artisanales variées pour le quotidien">
+                    <p>Autres marchandises artisanales variées pour répondre à vos besoins quotidiens.</p>
+                    <p class="price">À partir de 90 000 FBu</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="contact" id="contact">
+            <h2>Contactez-nous</h2>
+            <p class="cta">Commandez dès maintenant via WhatsApp ou email !</p>
+            <div class="contact-grid">
+                <div class="contact-item">
+                    <a href="mailto:marieinnovationburundi@gmail.com" aria-label="Envoyer un email à Ndayishimiye Marie Rose">
+                        <img src="c:\Users\SWC\Desktop\email.jpg" alt="Logo Gmail"> Email
+                    </a>
+                </div>
+                <div class="contact-item">
+                    <a href="https://wa.me/+25761298989" aria-label="Contacter via WhatsApp">
+                        <img src="c:\Users\SWC\Desktop\whatsapp.jpg" alt="Logo WhatsApp"> WhatsApp
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Commerce de Ndayishimiye Marie Rose. Tous droits réservés.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
+    <script>
+        // Loader
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.querySelector('.loader').classList.add('hidden');
+            }, 1000);
+        });
+
+        // Toggle mobile menu
+        const navToggle = document.querySelector('.nav-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        navToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            navToggle.classList.toggle('active');
+        });
+
+        // Smooth scroll and active link
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelectorAll('nav a').forEach(link => link.classList.remove('active'));
+                this.classList.add('active');
+                const target = document.querySelector(this.getAttribute('href'));
+                target.scrollIntoView({ behavior: 'smooth' });
+                if (window.innerWidth <= 768) {
+                    navLinks.classList.remove('active');
+                    navToggle.classList.remove('active');
+                }
+            });
+        });
+
+        // Active section on scroll
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section, header');
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (window.scrollY >= sectionTop - 60) {
+                    current = section.getAttribute('id');
+                }
+            });
+            document.querySelectorAll('nav a').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Vanilla Tilt for 3D effect
+        VanillaTilt.init(document.querySelectorAll('.product-item'), {
+            max: 10,
+            speed: 400,
+            glare: true,
+            'max-glare': 0.3
+        });
+    </script>
